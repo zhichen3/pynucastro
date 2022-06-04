@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pynucastro.networks.rate_collection &mdash; pynucastro 1.6.0.post109+gba23dc6 documentation</title>
+  <title>pynucastro.networks.rate_collection &mdash; pynucastro 1.6.0.post114+gd262b91 documentation</title>
       <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -29,6 +29,7 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="../../../index.html" class="icon icon-home"> pynucastro
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 1.6
@@ -65,6 +66,7 @@
 <p class="caption" role="heading"><span class="caption-text">Writing Networks</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../networks.html">Creating Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cxx-networks.html">C++ Networks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul>
@@ -119,11 +121,12 @@
 <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
 <span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">MaxNLocator</span>
 <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">SymLogNorm</span>
+<span class="kn">from</span> <span class="nn">matplotlib.scale</span> <span class="kn">import</span> <span class="n">SymmetricalLogTransform</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 
 <span class="c1"># Import Rate</span>
 <span class="kn">from</span> <span class="nn">pynucastro.nucleus</span> <span class="kn">import</span> <span class="n">Nucleus</span>
-<span class="kn">from</span> <span class="nn">pynucastro.rates</span> <span class="kn">import</span> <span class="n">Rate</span><span class="p">,</span> <span class="n">RatePair</span><span class="p">,</span> <span class="n">Library</span>
+<span class="kn">from</span> <span class="nn">pynucastro.rates</span> <span class="kn">import</span> <span class="n">Rate</span><span class="p">,</span> <span class="n">RatePair</span><span class="p">,</span> <span class="n">ApproximateRate</span><span class="p">,</span> <span class="n">Library</span>
 
 <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
 
@@ -605,11 +608,22 @@
             <span class="k">return</span> <span class="n">screening_map</span>
 
         <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rates</span><span class="p">:</span>
-            <span class="n">screen_nuclei</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">ion_screen</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">symmetric_screening</span><span class="p">:</span>
-                <span class="n">screen_nuclei</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">symmetric_screen</span>
+            <span class="n">all_screen_nuclei</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">ApproximateRate</span><span class="p">):</span>
+                <span class="c1"># loop over all of the rates in the approximate rate and grab their</span>
+                <span class="c1"># screening nuclei and append to the list</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;haven&#39;t writtne this yet&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">screen_nuclei</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">ion_screen</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">symmetric_screening</span><span class="p">:</span>
+                    <span class="n">screen_nuclei</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">symmetric_screen</span>
+                <span class="n">all_screen_nuclei</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">screen_nuclei</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">screen_nuclei</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">screen_nuclei</span> <span class="ow">in</span> <span class="n">all_screen_nuclei</span><span class="p">:</span>
+                <span class="c1"># screen_nuclei may be [] if it is a decay, gamma-capture, or neutron-capture</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">screen_nuclei</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
                 <span class="n">nucs</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">screen_nuclei</span><span class="p">])</span>
 
                 <span class="n">scr</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">screening_map</span> <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">nucs</span><span class="p">]</span>
@@ -1091,15 +1105,12 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_symlog</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">linthresh</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_symlog</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">linthresh</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">linscale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
 
-        <span class="k">assert</span> <span class="n">linthresh</span> <span class="o">&gt;=</span> <span class="mf">1.0</span>
-        <span class="n">neg</span> <span class="o">=</span> <span class="n">arr</span> <span class="o">&lt;</span> <span class="mf">0.0</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
-        <span class="n">needslog</span> <span class="o">=</span> <span class="n">arr</span> <span class="o">&gt;</span> <span class="n">linthresh</span>
+        <span class="c1"># Assume log base 10</span>
+        <span class="n">symlog_transform</span> <span class="o">=</span> <span class="n">SymmetricalLogTransform</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">linthresh</span><span class="p">,</span> <span class="n">linscale</span><span class="p">)</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">symlog_transform</span><span class="o">.</span><span class="n">transform_non_affine</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
 
-        <span class="n">arr</span><span class="p">[</span><span class="n">needslog</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">needslog</span><span class="p">])</span> <span class="o">+</span> <span class="n">linthresh</span>
-        <span class="n">arr</span><span class="p">[</span><span class="n">neg</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="k">return</span> <span class="n">arr</span>
 
     <span class="nd">@staticmethod</span>
@@ -1138,6 +1149,8 @@
 <span class="sd">            - *small* -- If using logarithmic scaling, zeros will be replaced with</span>
 <span class="sd">              this value. 1e-30 by default.</span>
 <span class="sd">            - *linthresh* -- Linearity threshold for symlog scaling.</span>
+<span class="sd">            - *linscale* --  The number of decades to use for each half of the linear</span>
+<span class="sd">              range. Stretches linear range relative to the logarithmic range.</span>
 <span class="sd">            - *filter_function* -- A callable to filter Nucleus objects with. Should</span>
 <span class="sd">              return *True* if the nuclide should be plotted.</span>
 <span class="sd">            - *outfile* -- Output file to save the plot to. The plot will be shown if</span>
@@ -1171,6 +1184,7 @@
         <span class="n">filter_function</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;filter_function&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">dpi</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;dpi&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
         <span class="n">linthresh</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;linthresh&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">linscale</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;linscale&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unrecognized keyword arguments: </span><span class="si">{</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1224,7 +1238,7 @@
         <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s2">&quot;log&quot;</span><span class="p">:</span>
             <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_safelog</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">small</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">scale</span> <span class="o">==</span> <span class="s2">&quot;symlog&quot;</span><span class="p">:</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_symlog</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">linthresh</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_symlog</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">linthresh</span><span class="p">,</span> <span class="n">linscale</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">cbar_bounds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">cbar_bounds</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
@@ -1313,8 +1327,10 @@
 <div class="viewcode-block" id="Explorer"><a class="viewcode-back" href="../../../pynucastro.networks.html#pynucastro.networks.rate_collection.Explorer">[docs]</a><span class="k">class</span> <span class="nc">Explorer</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; interactively explore a rate collection &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">comp</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">),</span>
-                 <span class="n">ydot_cutoff_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">always_show_p</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">always_show_alpha</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">ydot_cutoff_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rotated</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">hide_xalpha</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">always_show_p</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">always_show_alpha</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">node_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">node_font_size</span><span class="o">=</span><span class="mi">13</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; take a RateCollection and a composition &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rc</span> <span class="o">=</span> <span class="n">rc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comp</span> <span class="o">=</span> <span class="n">comp</span>
@@ -1322,13 +1338,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ydot_cutoff_value</span> <span class="o">=</span> <span class="n">ydot_cutoff_value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">always_show_p</span> <span class="o">=</span> <span class="n">always_show_p</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">always_show_alpha</span> <span class="o">=</span> <span class="n">always_show_alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hide_xalpha</span> <span class="o">=</span> <span class="n">hide_xalpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotated</span> <span class="o">=</span> <span class="n">rotated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_size</span> <span class="o">=</span> <span class="n">node_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_font_size</span> <span class="o">=</span> <span class="n">node_font_size</span>
 
     <span class="k">def</span> <span class="nf">_make_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logrho</span><span class="p">,</span> <span class="n">logT</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">10.0</span><span class="o">**</span><span class="n">logrho</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mf">10.0</span><span class="o">**</span><span class="n">logT</span><span class="p">,</span>
                      <span class="n">comp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">comp</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
                      <span class="n">ydot_cutoff_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ydot_cutoff_value</span><span class="p">,</span>
                      <span class="n">always_show_p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_show_p</span><span class="p">,</span>
-                     <span class="n">always_show_alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_show_alpha</span><span class="p">)</span>
+                     <span class="n">always_show_alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_show_alpha</span><span class="p">,</span>
+                     <span class="n">rotated</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rotated</span><span class="p">,</span>
+                     <span class="n">hide_xalpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hide_xalpha</span><span class="p">,</span>
+                     <span class="n">node_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_size</span><span class="p">,</span> <span class="n">node_font_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_font_size</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Explorer.explore"><a class="viewcode-back" href="../../../pynucastro.networks.html#pynucastro.networks.rate_collection.Explorer.explore">[docs]</a>    <span class="k">def</span> <span class="nf">explore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logrho</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="n">logT</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)):</span>
         <span class="sd">&quot;&quot;&quot;Perform interactive exploration of the network structure.&quot;&quot;&quot;</span>
