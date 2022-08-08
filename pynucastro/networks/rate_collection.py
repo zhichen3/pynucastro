@@ -769,9 +769,14 @@ class RateCollection:
         # However, we should force normalization through constraint eq1.
         nse_ye = sum(nuc.Z * comp_NSE.X[nuc] / nuc.A for nuc in self.unique_nuclei)
 
-        eq1 = sum(comp_NSE.X.values()) - 1.0
-        eq2 = ye - nse_ye
+        constraint_eq = []
+        constraint_eq.append(sum(comp_NSE.X.values()) - 1.0)
+        constraint_eq.append(ye - nse_ye)
 
+        jac = np.zeros((2, 2))
+        
+        
+        
         return [eq1, eq2]
 
     def get_comp_NSE(self, rho, T, ye, init_guess=(-3.5, -15.0), tol=1.5e-9, tell_guess=False):
