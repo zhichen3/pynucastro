@@ -797,7 +797,60 @@ class RateCollection:
         
         return jac
 
-    def get_comp_NSE(self, rho, T, ye, init_guess=(-3.5, -15.0), tol=1.5e-9, tell_guess=False):
+    def _nse_nr_solve(self, u, rho, T, ye, tol=1.5e-9, maxfev=800):
+        """
+        This is the newton-raphson routine of solving the nse equations.
+        Input:
+        --------------------------------------------
+        u: initial guess of chemical potential
+        rho: density
+        T: temperature
+        ye: electron fraction
+        --------------------------------------------
+        Output:
+        --------------------------------------------
+        Converged solution of chemical potential, u
+        """
+
+        du = np.zeros(2)
+        du_old = np.zeros(2)
+        u_init = u
+        count = 0
+
+        for n in range(maxfev):
+            comp_NSE = self._evaluate_comp_NSE(u, rho, T, ye)
+
+            if any(np.isnan(u)):
+                break
+
+            nse_eq = self._constraint_eq(u, rho, T, ye)
+            nse_jac = self._nse_jac(u, rho, T, ye)
+
+            # # scale down jacobian by a common factor to avoid reaching inf
+            # if (np.amax(jac)) > 1.0e150):
+            #     scale_fac = np.amax()
+            # else:
+            #     scale_fac = 1.0
+            du = np.linalg.solve(-nse_jac, np.array(nse_eq))
+
+            if (np.all(np.isclose(nse_eq, [0.0, 0.0], rtol=1e-2, atol=1e-3)) or np.all((np.abs(du) - np.abs(du_old)) / np.abs(du) < tol)):
+                return u
+
+            if any(np.abs(du) > np.abs(du_old)):
+                count += 1
+            else:
+                count = 0
+
+            # assert count < 10, "Solution is diverging, not making good progress"
+
+            u[0] += du[0]
+            u[1] += du[1]
+
+            du_old = du
+
+        return u_init
+
+    def get_comp_NSE(self, rho, T, ye, init_guess=(-3.5, -15.0), tol=1.5e-9, maxfev=800, tell_guess=False, mode="nr"):
         """
         Returns the NSE composition given density, temperature and prescribed electron fraction
         using scipy.fsolve, `tol` is an optional parameter for the tolerance of scipy.fsolve.
@@ -819,7 +872,15 @@ class RateCollection:
             init_dx = 0.5
 
             while (i < 15):
-                u = fsolve(self._constraint_eq, guess, args=(rho, T, ye), fprime=self._nse_jac, xtol=tol, maxfev=800)
+                if mode == "nr":
+                    u = self._nse_nr_solve(init_guess, rho, T, ye, tol=tol, maxfev=maxfev)
+                    
+                elif mode == "fsolve":
+                    u = fsolve(self._constraint_eq, guess, args=(rho, T, ye), fprime=self._nse_jac, xtol=tol, maxfev=maxfev)
+                    
+                else:
+                    raise ValueError("Invalid solver, select nr or fsolve!")
+                
                 res = self._constraint_eq(u, rho, T, ye)
                 is_pos_new = all(k > 0 for k in res)
                 found_sol = np.all(np.isclose(res, [0.0, 0.0], rtol=1e-2, atol=1e-3))
