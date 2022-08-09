@@ -826,13 +826,19 @@ class RateCollection:
             nse_eq = self._constraint_eq(u, rho, T, ye)
             nse_jac = self._nse_jac(u, rho, T, ye)
 
-            # # scale down jacobian by a common factor to avoid reaching inf
-            # if (np.amax(jac)) > 1.0e150):
-            #     scale_fac = np.amax()
-            # else:
-            #     scale_fac = 1.0
-            du = np.linalg.solve(-nse_jac, np.array(nse_eq))
+            #du = np.linalg.solve(-nse_jac, np.array(nse_eq))
 
+            # scale down jacobian by a common factor to avoid reaching inf, improves performance
+            scale_fac = 1.0
+            if (np.amax(nse_jac) > 1.0e150):
+                scale_fac = np.amax(nse_jac)
+                nse_jac /= scale_fac
+                
+            nse_jac_inv = np.linalg.inv(nse_jac) / scale_fac
+
+            du[0] = -(nse_eq[0] * nse_jac_inv[0, 0] + nse_eq[1] * nse_jac_inv[0, 1])
+            du[1] = -(nse_eq[0] * nse_jac_inv[1, 0] + nse_eq[1] * nse_jac_inv[1, 1])
+            
             if (np.all(np.isclose(nse_eq, [0.0, 0.0], rtol=1e-2, atol=1e-3)) or np.all((np.abs(du) - np.abs(du_old)) / np.abs(du) < tol)):
                 return u
 
@@ -842,7 +848,6 @@ class RateCollection:
                 count = 0
 
             # assert count < 10, "Solution is diverging, not making good progress"
-
             u[0] += du[0]
             u[1] += du[1]
 
