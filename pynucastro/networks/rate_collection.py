@@ -770,7 +770,7 @@ class RateCollection:
         nse_ye = sum(nuc.Z * comp_NSE.X[nuc] / nuc.A for nuc in self.unique_nuclei)
 
         eq1 = sum(comp_NSE.X.values()) - 1.0
-        eq2 = ye - nse_ye
+        eq2 = nse_ye - ye
         
         return [eq1, eq2]
     
@@ -790,13 +790,100 @@ class RateCollection:
                 
             jac[0,0] += comp_NSE.X[nuc] * nuc.Z / k / T / Erg2MeV
             jac[0,1] += comp_NSE.X[nuc] * nuc.N / k / T / Erg2MeV
-            jac[1,0] -= comp_NSE.X[nuc] * nuc.Z * nuc.Z / nuc.A / k / T / Erg2MeV
-            jac[1,1] -= comp_NSE.X[nuc] * nuc.Z * nuc.N / nuc.A / k / T / Erg2MeV
+            jac[1,0] += comp_NSE.X[nuc] * nuc.Z * nuc.Z / nuc.A / k / T / Erg2MeV
+            jac[1,1] += comp_NSE.X[nuc] * nuc.Z * nuc.N / nuc.A / k / T / Erg2MeV
         
         assert singular_jac == False, "Error: network always gives singular jacobian!"
         
         return jac
 
+    def newton_raphson(self, rho, T, ye, init_guess=[-3.0648236, -14.56045], nloops=5000):
+
+        ErgToMeV = 624151.0
+        k = constants.value("Boltzmann constant") * 1.0e7
+        converge = False
+        diff = np.zeros(2)
+        new_diff = np.zeros(2)
+        diff_count = 0
+        
+        for i in range(nloops):
+            #comp_NSE = self._evaluate_comp_NSE(init_guess, rho, T, ye)
+
+            if any(np.isnan(init_guess)):
+                break
+            
+            # eq = []
+            # nse_ye = 0.0
+            
+            # nse_ye = sum(nuc.Z * comp_NSE.X[nuc] / nuc.A for nuc in self.unique_nuclei)
+            # eq.append(sum(comp_NSE.X.values()) - 1.0)
+            # eq.append(nse_ye - ye)
+
+            eq = self._constraint_eq(init_guess, rho, T, ye)
+            jac = self._nse_jac(init_guess, rho, T, ye)
+            converge = np.all(np.isclose(eq, [0.0, 0.0], rtol=1e-2, atol=1e-3))
+            if converge:
+                return init_guess
+            
+            # jac = np.zeros((2,2))
+            # jac_inv = np.zeros((2,2))
+
+            # scale down by a common factor to avoid reaching inf
+            # if (max(comp_NSE.X.values()) > 1.0e150):
+            #     scale_fac = 1.0/max(comp_NSE.X.values())
+            # # elif (max(comp_NSE.X.values()) < 1.0e-100):
+            # #     scale_fac = 1.0/max(comp_NSE.X.values())
+            # else:
+            #     scale_fac = 1.0
+
+            #jac = self._nse_jac(init_guess, rho, T, ye)
+            #jac_inv = np.linalg.inv(jac)
+            
+            # for nuc in self.unique_nuclei:
+            #     jac[0,0] += comp_NSE.X[nuc] * scale_fac * nuc.Z / k / T / ErgToMeV
+            #     jac[0,1] += comp_NSE.X[nuc] * scale_fac * nuc.N / k / T / ErgToMeV 
+            #     jac[1,0] += comp_NSE.X[nuc] * scale_fac * nuc.Z * nuc.Z / nuc.A / k / T / ErgToMeV
+            #     jac[1,1] += comp_NSE.X[nuc] * scale_fac * nuc.Z * nuc.N / nuc.A / k / T / ErgToMeV
+            #     #print(f"{nuc} X is {comp_NSE.X[nuc]}")
+            #     #print(f"{nuc} Z is {nuc.Z}")
+            #     #print(f"{nuc} N is {nuc.N}")
+            #     #print(f"jacobian is {jac}")
+
+            # det = jac[0,0] * jac[1,1] - jac[1,0] * jac[0,1]
+            # assert det != 0.0, "Jacobian is a singular matrix! Try a different initial guess!"
+
+            # jac_inv[0,0] = jac[1, 1] / det * scale_fac
+            # jac_inv[0,1] = -jac[0, 1] / det * scale_fac
+            # jac_inv[1,0] = -jac[1, 0] / det * scale_fac
+            # jac_inv[1,1] = jac[0, 0] / det * scale_fac
+            # # print(f"det is {det}")
+            # # print(f" jacobian are {jac}")
+            # # #diff = np.linalg.solve(-jac,np.array(eq))
+            # # #print(f"diff using solve is {diff}")
+            # # #jac_inv = np.linalg.inv(jac)
+            
+            # print(f"jac_inv is {jac_inv}")
+            # update
+            # new_diff[0] = -(eq[0] * jac_inv[0,0] + eq[1] * jac_inv[0,1])
+            # new_diff[1] = -(eq[0] * jac_inv[1,0] + eq[1] * jac_inv[1,1])
+
+            new_diff = np.linalg.solve(-jac, np.array(eq))
+            
+            if any(np.abs(new_diff) > np.abs(diff)):
+                diff_count += 1
+            else:
+                diff_count = 0
+                
+            if diff_count > 10:
+                raise ValueError("Not making good progress in finding solution")
+            
+            diff = new_diff
+            #print(f"diff are {diff[0]} and {diff[1]}")
+            init_guess += diff
+            #print(f"init guess is now {init_guess}")
+
+        raise ValueError("Unable to find a solution, try to adjust initial guess manually")
+    
     def _nse_nr_solve(self, u, rho, T, ye, tol=1.5e-9, maxfev=800):
         """
         This is the newton-raphson routine of solving the nse equations.
