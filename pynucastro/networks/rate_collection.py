@@ -818,7 +818,7 @@ class RateCollection:
             init_dx = 0.5
 
             while (i < 15):
-                u = fsolve(self._constraint_eq, guess, args=(rho, T, ye), xtol=tol, maxfev=800)
+                u = fsolve(self._constraint_eq, guess, args=(rho, T, ye), fprime=self._nse_jac, xtol=tol, maxfev=800)
                 res = self._constraint_eq(u, rho, T, ye)
                 is_pos_new = all(k > 0 for k in res)
                 found_sol = np.all(np.isclose(res, [0.0, 0.0], rtol=1e-2, atol=1e-3))
