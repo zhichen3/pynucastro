@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; pynucastro 1.6.0.post173+g9eb3ef8 documentation</title>
+  <title>Index &mdash; pynucastro 1.6.0.post201+g0c06caa documentation</title>
       <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,6 +16,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -60,6 +61,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="screening-examples.html">Screening Rates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modify-example.html">Modifying Rates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="approx-rates-examples.html">Approximate Rates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="unimportant-rates.html">Removing Unimportant Rates</a></li>
@@ -131,12 +133,18 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.PlasmaState.abar">abar (pynucastro.screening.screen.PlasmaState attribute)</a>
+      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.ScreenFactors.a1">a1 (pynucastro.screening.screen.ScreenFactors attribute)</a>
 </li>
-      <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.ScreeningPair.add_rate">add_rate() (pynucastro.networks.rate_collection.ScreeningPair method)</a>
+      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.ScreenFactors.a2">a2 (pynucastro.screening.screen.ScreenFactors attribute)</a>
+</li>
+      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.PlasmaState.abar">abar (pynucastro.screening.screen.PlasmaState attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.ScreeningPair.add_rate">add_rate() (pynucastro.networks.rate_collection.ScreeningPair method)</a>
+</li>
+      <li><a href="pynucastro.networks.html#pynucastro.networks.amrexastro_cxx_network.AmrexAstroCxxNetwork">AmrexAstroCxxNetwork (class in pynucastro.networks.amrexastro_cxx_network)</a>
+</li>
       <li><a href="pynucastro.rates.html#pynucastro.rates.rate.ApproximateRate">ApproximateRate (class in pynucastro.rates.rate)</a>
 </li>
       <li><a href="pynucastro.screening.html#pynucastro.screening.screen.ScreenFactors.aznut">aznut (pynucastro.screening.screen.ScreenFactors attribute)</a>
@@ -171,10 +179,16 @@
 </li>
       <li><a href="pynucastro.nucdata.html#pynucastro.nucdata.nucleus.Nucleus.cindex">cindex() (pynucastro.nucdata.nucleus.Nucleus method)</a>
 </li>
-      <li><a href="pynucastro.networks.html#pynucastro.networks.base_cxx_network.BaseCxxNetwork.compose_jacobian">compose_jacobian() (pynucastro.networks.base_cxx_network.BaseCxxNetwork method)</a>
+      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.PlasmaState.class_type">class_type (pynucastro.screening.screen.PlasmaState attribute)</a>
+
+      <ul>
+        <li><a href="pynucastro.screening.html#pynucastro.screening.screen.ScreenFactors.class_type">(pynucastro.screening.screen.ScreenFactors attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pynucastro.networks.html#pynucastro.networks.base_cxx_network.BaseCxxNetwork.compose_jacobian">compose_jacobian() (pynucastro.networks.base_cxx_network.BaseCxxNetwork method)</a>
+</li>
       <li><a href="pynucastro.networks.html#pynucastro.networks.base_cxx_network.BaseCxxNetwork.compose_ydot">compose_ydot() (pynucastro.networks.base_cxx_network.BaseCxxNetwork method)</a>
 </li>
       <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.Composition">Composition (class in pynucastro.networks.rate_collection)</a>
@@ -249,8 +263,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pynucastro.rates.html#pynucastro.rates.rate.SingleSet.f">f() (pynucastro.rates.rate.SingleSet method)</a>
 </li>
-      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.PlasmaState.fill">fill() (pynucastro.screening.screen.PlasmaState class method)</a>
-</li>
       <li><a href="pynucastro.rates.html#pynucastro.rates.library.Library.filter">filter() (pynucastro.rates.library.Library method)</a>
 </li>
       <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.RateCollection.find_reverse">find_reverse() (pynucastro.networks.rate_collection.RateCollection method)</a>
@@ -291,7 +303,7 @@
 </li>
       <li><a href="pynucastro.rates.html#pynucastro.rates.rate.ApproximateRate.get_child_rates">get_child_rates() (pynucastro.rates.rate.ApproximateRate method)</a>
 </li>
-      <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.RateCollection.get_comp_NSE">get_comp_NSE() (pynucastro.networks.rate_collection.RateCollection method)</a>
+      <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.RateCollection.get_comp_nse">get_comp_nse() (pynucastro.networks.rate_collection.RateCollection method)</a>
 </li>
       <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.RateCollection.get_forward_rates">get_forward_rates() (pynucastro.networks.rate_collection.RateCollection method)</a>
 </li>
@@ -314,6 +326,8 @@
 </li>
       </ul></li>
       <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.RateCollection.get_nuclei_latex_string">get_nuclei_latex_string() (pynucastro.networks.rate_collection.RateCollection method)</a>
+</li>
+      <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.RateCollection.get_nuclei_needing_partition_functions">get_nuclei_needing_partition_functions() (pynucastro.networks.rate_collection.RateCollection method)</a>
 </li>
       <li><a href="pynucastro.nucdata.html#pynucastro.nucdata.binding_table.BindingTable.get_nuclide">get_nuclide() (pynucastro.nucdata.binding_table.BindingTable method)</a>
 </li>
@@ -443,6 +457,10 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.RateCollection.make_ap_pg_approx">make_ap_pg_approx() (pynucastro.networks.rate_collection.RateCollection method)</a>
 </li>
+      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.make_plasma_state">make_plasma_state() (in module pynucastro.screening.screen)</a>
+</li>
+      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.make_screen_factors">make_screen_factors() (in module pynucastro.screening.screen)</a>
+</li>
       <li><a href="pynucastro.nucdata.html#pynucastro.nucdata.mass_nuclide.MassNuclide">MassNuclide (class in pynucastro.nucdata.mass_nuclide)</a>
 </li>
       <li><a href="pynucastro.nucdata.html#pynucastro.nucdata.mass_nuclide.MassTable">MassTable (class in pynucastro.nucdata.mass_nuclide)</a>
@@ -459,13 +477,13 @@
 </li>
         <li><a href="pynucastro.networks.html#module-pynucastro.networks">pynucastro.networks</a>
 </li>
+        <li><a href="pynucastro.networks.html#module-pynucastro.networks.amrexastro_cxx_network">pynucastro.networks.amrexastro_cxx_network</a>
+</li>
         <li><a href="pynucastro.networks.html#module-pynucastro.networks.base_cxx_network">pynucastro.networks.base_cxx_network</a>
 </li>
         <li><a href="pynucastro.networks.html#module-pynucastro.networks.python_network">pynucastro.networks.python_network</a>
 </li>
         <li><a href="pynucastro.networks.html#module-pynucastro.networks.rate_collection">pynucastro.networks.rate_collection</a>
-</li>
-        <li><a href="pynucastro.networks.html#module-pynucastro.networks.starkiller_cxx_network">pynucastro.networks.starkiller_cxx_network</a>
 </li>
         <li><a href="pynucastro.networks.html#module-pynucastro.networks.sympy_network_support">pynucastro.networks.sympy_network_support</a>
 </li>
@@ -502,16 +520,12 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.ScreenFactors.n1">n1 (pynucastro.screening.screen.ScreenFactors attribute)</a>
-</li>
-      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.ScreenFactors.n2">n2 (pynucastro.screening.screen.ScreenFactors attribute)</a>
-</li>
       <li><a href="pynucastro.screening.html#pynucastro.screening.screen.PlasmaState.n_e">n_e (pynucastro.screening.screen.PlasmaState attribute)</a>
+</li>
+      <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.RateCollection.network_overview">network_overview() (pynucastro.networks.rate_collection.RateCollection method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.RateCollection.network_overview">network_overview() (pynucastro.networks.rate_collection.RateCollection method)</a>
-</li>
       <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.Composition.normalize">normalize() (pynucastro.networks.rate_collection.Composition method)</a>
 </li>
       <li><a href="pynucastro.nucdata.html#pynucastro.nucdata.nucleus.Nucleus">Nucleus (class in pynucastro.nucdata.nucleus)</a>
@@ -544,6 +558,8 @@
       </ul></li>
       <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.RateCollection.plot_network_chart">plot_network_chart() (pynucastro.networks.rate_collection.RateCollection method)</a>
 </li>
+      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.potekhin_1998">potekhin_1998() (in module pynucastro.screening.screen)</a>
+</li>
       <li><a href="pynucastro.nucdata.html#pynucastro.nucdata.binding_nuclide.BindingNuclide.print_contents">print_contents() (pynucastro.nucdata.binding_nuclide.BindingNuclide method)</a>
 </li>
       <li>
@@ -558,6 +574,13 @@
 
       <ul>
         <li><a href="pynucastro.networks.html#module-pynucastro.networks">module</a>
+</li>
+      </ul></li>
+      <li>
+    pynucastro.networks.amrexastro_cxx_network
+
+      <ul>
+        <li><a href="pynucastro.networks.html#module-pynucastro.networks.amrexastro_cxx_network">module</a>
 </li>
       </ul></li>
       <li>
@@ -579,13 +602,6 @@
 
       <ul>
         <li><a href="pynucastro.networks.html#module-pynucastro.networks.rate_collection">module</a>
-</li>
-      </ul></li>
-      <li>
-    pynucastro.networks.starkiller_cxx_network
-
-      <ul>
-        <li><a href="pynucastro.networks.html#module-pynucastro.networks.starkiller_cxx_network">module</a>
 </li>
       </ul></li>
       <li>
@@ -708,6 +724,8 @@
 </li>
       <li><a href="pynucastro.rates.html#pynucastro.rates.rate.RatePair">RatePair (class in pynucastro.rates.rate)</a>
 </li>
+      <li><a href="pynucastro.networks.html#pynucastro.networks.python_network.PythonNetwork.rates_string">rates_string() (pynucastro.networks.python_network.PythonNetwork method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pynucastro.rates.html#pynucastro.rates.library.ReacLibLibrary">ReacLibLibrary (class in pynucastro.rates.library)</a>
@@ -730,6 +748,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pynucastro.screening.html#pynucastro.screening.screen.ScreenFactors">ScreenFactors (class in pynucastro.screening.screen)</a>
 </li>
+      <li><a href="pynucastro.networks.html#pynucastro.networks.python_network.PythonNetwork.screening_string">screening_string() (pynucastro.networks.python_network.PythonNetwork method)</a>
+</li>
       <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.ScreeningPair">ScreeningPair (class in pynucastro.networks.rate_collection)</a>
 </li>
       <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.Composition.set_all">set_all() (pynucastro.networks.rate_collection.Composition method)</a>
@@ -738,10 +758,10 @@
 </li>
       <li><a href="pynucastro.networks.html#pynucastro.networks.rate_collection.Composition.set_solar_like">set_solar_like() (pynucastro.networks.rate_collection.Composition method)</a>
 </li>
-      <li><a href="pynucastro.rates.html#pynucastro.rates.rate.SingleSet.set_string_cxx">set_string_cxx() (pynucastro.rates.rate.SingleSet method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pynucastro.rates.html#pynucastro.rates.rate.SingleSet.set_string_cxx">set_string_cxx() (pynucastro.rates.rate.SingleSet method)</a>
+</li>
       <li><a href="pynucastro.rates.html#pynucastro.rates.rate.SingleSet.set_string_py">set_string_py() (pynucastro.rates.rate.SingleSet method)</a>
 </li>
       <li><a href="pynucastro.rates.html#pynucastro.rates.rate.SingleSet">SingleSet (class in pynucastro.rates.rate)</a>
@@ -751,8 +771,6 @@
       <li><a href="pynucastro.nucdata.html#pynucastro.nucdata.spin_nuclide.SpinNuclide">SpinNuclide (class in pynucastro.nucdata.spin_nuclide)</a>
 </li>
       <li><a href="pynucastro.nucdata.html#pynucastro.nucdata.spin_nuclide.SpinTable">SpinTable (class in pynucastro.nucdata.spin_nuclide)</a>
-</li>
-      <li><a href="pynucastro.networks.html#pynucastro.networks.starkiller_cxx_network.StarKillerCxxNetwork">StarKillerCxxNetwork (class in pynucastro.networks.starkiller_cxx_network)</a>
 </li>
       <li><a href="pynucastro.networks.html#pynucastro.networks.sympy_network_support.SympyRates">SympyRates (class in pynucastro.networks.sympy_network_support)</a>
 </li>
@@ -824,10 +842,14 @@
 <h2 id="Z">Z</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.PlasmaState.z2bar">z2bar (pynucastro.screening.screen.PlasmaState attribute)</a>
+      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.ScreenFactors.z1">z1 (pynucastro.screening.screen.ScreenFactors attribute)</a>
+</li>
+      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.ScreenFactors.z2">z2 (pynucastro.screening.screen.ScreenFactors attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pynucastro.screening.html#pynucastro.screening.screen.PlasmaState.z2bar">z2bar (pynucastro.screening.screen.PlasmaState attribute)</a>
+</li>
       <li><a href="pynucastro.screening.html#pynucastro.screening.screen.PlasmaState.zbar">zbar (pynucastro.screening.screen.PlasmaState attribute)</a>
 </li>
       <li><a href="pynucastro.screening.html#pynucastro.screening.screen.ScreenFactors.ztilde">ztilde (pynucastro.screening.screen.ScreenFactors attribute)</a>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>C++ Networks &mdash; pynucastro 1.6.0.post173+g9eb3ef8 documentation</title>
+  <title>C++ Networks &mdash; pynucastro 1.6.0.post201+g0c06caa documentation</title>
       <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,6 +17,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -63,6 +64,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advanced Usage</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="screening-examples.html">Screening Rates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modify-example.html">Modifying Rates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="approx-rates-examples.html">Approximate Rates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="unimportant-rates.html">Removing Unimportant Rates</a></li>
@@ -132,7 +134,7 @@
 <h1>C++ Networks<a class="headerlink" href="#c-networks" title="Permalink to this heading">¶</a></h1>
 <p>Presently, pynucastro can generate a C++ network that works in the
 AMReX-Astro <a class="reference external" href="https://github.com/amrex-astro/Microphysics">Microphysics</a>.  This is done through
-the <code class="docutils literal notranslate"><span class="pre">StarKillerCxxNetwork</span></code> class.  A simple
+the <code class="docutils literal notranslate"><span class="pre">AmrexAstroCxxNetwork</span></code> class.  A simple
 C++ 3-alpha network that works with <code class="docutils literal notranslate"><span class="pre">Microphysics</span></code> can be created via:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pynucastro</span> <span class="k">as</span> <span class="nn">pyna</span>
 
@@ -140,12 +142,12 @@ C++ 3-alpha network that works with <code class="docutils literal notranslate"><
 
 <span class="n">mylib</span> <span class="o">=</span> <span class="n">reaclib_library</span><span class="o">.</span><span class="n">linking_nuclei</span><span class="p">([</span><span class="s2">&quot;he4&quot;</span><span class="p">,</span> <span class="s2">&quot;c12&quot;</span><span class="p">,</span> <span class="s2">&quot;o16&quot;</span><span class="p">])</span>
 
-<span class="n">net</span> <span class="o">=</span> <span class="n">pyna</span><span class="o">.</span><span class="n">StarKillerCxxNetwork</span><span class="p">(</span><span class="n">libraries</span><span class="o">=</span><span class="p">[</span><span class="n">mylib</span><span class="p">],</span> <span class="n">rate_params</span><span class="o">=</span><span class="p">[</span><span class="n">r</span><span class="p">])</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">pyna</span><span class="o">.</span><span class="n">AmrexAstroCxxNetwork</span><span class="p">(</span><span class="n">libraries</span><span class="o">=</span><span class="p">[</span><span class="n">mylib</span><span class="p">],</span> <span class="n">rate_params</span><span class="o">=</span><span class="p">[</span><span class="n">r</span><span class="p">])</span>
 <span class="n">net</span><span class="o">.</span><span class="n">write_network</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The C++ network uses a set of template files in
-<code class="docutils literal notranslate"><span class="pre">pynucastro/templates/starkiller-cxx-microphysics/</span></code> which have
+<code class="docutils literal notranslate"><span class="pre">pynucastro/templates/amrexastro-cxx-microphysics/</span></code> which have
 placeholders of the form <code class="docutils literal notranslate"><span class="pre">&lt;func&gt;(num)</span></code>.  Here,</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">func</span></code> is a tag that corresponds to a function that will be called
