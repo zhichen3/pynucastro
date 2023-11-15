@@ -1329,7 +1329,7 @@ class ReacLibRate(Rate):
         ax.set_xlabel(r"$T$")
 
         if self.dens_exp == 0:
-            ax.set_ylabel(r"\tau")
+            ax.set_ylabel(r"$\tau$")
         elif self.dens_exp == 1:
             ax.set_ylabel(r"$N_A <\sigma v>$")
         elif self.dens_exp == 2:
@@ -1784,7 +1784,7 @@ class DerivedRate(ReacLibRate):
         skip_nuclei = {Nucleus("h1"), Nucleus("n"), Nucleus("he4")}
         for nuc in set(self.rate.reactants + self.rate.products) - skip_nuclei:
             if not nuc.partition_function:
-                warnings.warn(UserWarning(f'{nuc} partition function is not supported by tables: set pf = 1.0 by default'))
+                warnings.warn(UserWarning(f"{nuc} partition function is not supported by tables: set pf = 1.0 by default"))
 
     def eval(self, T, rhoY=None):
 
